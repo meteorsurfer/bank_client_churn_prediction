@@ -33,7 +33,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python main.py
+    startCommand: python app.py
     autoDeploy: true
     envVars:
       - key: MLFLOW_TRACKING_URI
@@ -41,3 +41,4 @@ services:
           name: mlflow-server
 
           type: web
+
