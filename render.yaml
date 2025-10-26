@@ -39,6 +39,6 @@ services:
       - key: MLFLOW_TRACKING_URI
         fromService:
           name: mlflow-server
-
           type: web
+
 
