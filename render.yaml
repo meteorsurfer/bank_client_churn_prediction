@@ -1,0 +1,43 @@
+# =========================================================
+# Render Deployment Configuration for MLflow + Churn App
+# Author: Alan Perry C. Daen
+# Description:
+#   - Hosts a lightweight MLflow Tracking Server (no DB)
+#   - Runs a churn training worker app that logs to MLflow
+#   - Optimized for Render Free Plan with minimal idle downtime
+# =========================================================
+
+services:
+  - type: web
+    name: mlflow-server
+    env: python
+    plan: free
+    buildCommand: pip install mlflow gunicorn
+    startCommand: >
+      mlflow server
+      --backend-store-uri ./mlruns
+      --default-artifact-root ./mlartifacts
+      --host 0.0.0.0
+      --port $PORT
+    disk:
+      name: mlflow-artifacts
+      mountPath: /opt/render/project/src/mlartifacts
+      sizeGB: 2
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+
+  - type: worker
+    name: churn-train-worker
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    autoDeploy: true
+    envVars:
+      - key: MLFLOW_TRACKING_URI
+        fromService:
+          name: mlflow-server
+          type: web
