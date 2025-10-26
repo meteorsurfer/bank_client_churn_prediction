@@ -1,9 +1,6 @@
 import pandas as pd
-
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
-
-
 
 class DataPreprocessor:
     def __init__(self, filepath):
@@ -21,3 +18,4 @@ class DataPreprocessor:
 
     def scale(self, X_train, X_test):
         return self.scaler.fit_transform(X_train), self.scaler.transform(X_test)
+
