@@ -5,3 +5,4 @@ catboost
 lightgbm
 xgboost
 mlflow
+python-dotenv
